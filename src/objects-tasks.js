@@ -143,8 +143,35 @@ function makeWord(lettersObject) {
  *    sellTickets([25, 25, 50]) => true
  *    sellTickets([25, 100]) => false (The seller does not have enough money to give change.)
  */
-function sellTickets(/* queue */) {
-  throw new Error('Not implemented');
+function sellTickets(queue) {
+  let c25 = 0;
+  let c50 = 0;
+  let c100 = 0;
+  let p = true;
+  queue.forEach((x) => {
+    if (x === 25) c25 += 1;
+    if (x === 50 && c25 > 0) {
+      c50 += 1;
+      c25 -= 1;
+    }
+    if (x === 50 && c25 < 1) {
+      p = false;
+    }
+    if (x === 100 && ((c50 > 0 && c25 > 0) || c25 > 2)) {
+      c100 += 1;
+      if (c50 > 1) {
+        c50 -= 1;
+        c25 -= 1;
+      } else {
+        c25 -= 3;
+      }
+    }
+    if (x === 100 && (c50 < 0 || c25 < 3)) {
+      p = false;
+    }
+    return c100;
+  });
+  return p;
 }
 
 /**
@@ -222,8 +249,23 @@ function fromJSON(/* proto, json */) {
  *      { country: 'Russia',  city: 'Saint Petersburg' }
  *    ]
  */
-function sortCitiesArray(/* arr */) {
-  throw new Error('Not implemented');
+function sortCitiesArray(arr) {
+  arr.sort((a, b) => {
+    if (a.country > b.country) {
+      return 1;
+    }
+    if (a.country < b.country) {
+      return -1;
+    }
+    if (a.city > b.city) {
+      return 1;
+    }
+    if (a.city < b.city) {
+      return -1;
+    }
+    return 0;
+  });
+  return arr;
 }
 
 /**
